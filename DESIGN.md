@@ -119,7 +119,7 @@ Todo en ángulo recto (`border-radius: 0`). Única excepción: el botón de play
 - **Ficha de película**: reproductor y debajo una tabla etiqueta | dato con líneas finas
   (Sinopsis, Duración, Género, Año, créditos, festivales), como la web anterior. Pósters debajo.
 - **Reproductor**: muestra el fotograma y un círculo oscuro translúcido con el triángulo de play (verde al pasar el cursor); el vídeo solo se carga al pulsar.
-- **Visor de fotos**: pantalla completa, flechas, teclado y deslizar. En escritorio, como en una galería: la foto a la izquierda y la ficha a la derecha (las fotos verticales, centradas en la pantalla con la ficha a su lado); en móvil, la ficha debajo. Título en verde y datos (año, película, tamaño de copia, compra) en blanco.
+- **Visor de fotos**: pantalla completa, flechas, teclado y deslizar. En escritorio, como en una galería: la foto a la izquierda y la ficha a la derecha (las fotos verticales, centradas en la pantalla con la ficha a su lado); en móvil, la ficha debajo. Título en verde, datos (año, película, tamaño de copia) en blanco y un botón "Comprar" que abre el correo con el mensaje ya redactado.
 - **Tarjetas de álbum (Fotografía)**: cuadradas como el resto, con las tres primeras fotos apiladas como copias; al pasar el cursor se abren en abanico; en pantallas táctiles se abren y cierran solas, despacio (salvo con movimiento reducido).
 - **Recuadro pendiente**: rayas diagonales y la etiqueta "Imagen pendiente".
 
