@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0e0d0b">
+  <title>Mario Alejandro Arias</title>
+  <meta name="description" content="Mario Alejandro Arias: Filmmaker, Director and Creative Consultant. Cine, videoclips, fotografía, fashion films, publicidad y música.">
+  <meta property="og:title" content="Mario Alejandro Arias">
+  <meta property="og:description" content="Filmmaker, Director and Creative Consultant. Cine, videoclips, fotografía, fashion films, publicidad y música.">
+  <meta property="og:image" content="images/fotos/ecuador/ecuador-04.jpg">
+
+  <!-- Tipografías (Google Fonts): títulos, texto y etiquetas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip" id="skip" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" id="brand" href="#/">Mario Alejandro Arias</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav">Menú</button>
+      <nav class="nav" id="nav" aria-label="Principal">
+        <ul id="nav-list"></ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <noscript><p>Esta web necesita JavaScript. / This site needs JavaScript.</p></noscript>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="label" id="footer-name">Mario Alejandro Arias</p>
+      <ul class="label" id="footer-links"></ul>
+      <div class="lang" data-lang-switch></div>
+    </div>
+  </footer>
+
+  <!-- Visor de fotos y pósters -->
+  <dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+    <div class="viewer__bar">
+      <span class="label" id="viewer-count"></span>
+      <button class="viewer__btn" id="viewer-close" type="button">Cerrar</button>
+    </div>
+    <div class="viewer__stage">
+      <img id="viewer-img" src="data:," alt="">
+      <button class="viewer__arrow viewer__arrow--prev" id="viewer-prev" type="button" aria-label="Anterior">←</button>
+      <button class="viewer__arrow viewer__arrow--next" id="viewer-next" type="button" aria-label="Siguiente">→</button>
+    </div>
+    <div class="viewer__info">
+      <h2 class="viewer__title" id="viewer-title"></h2>
+      <div class="viewer__facts" id="viewer-facts"></div>
+    </div>
+  </dialog>
+
+  <!-- Contenido (editable) y lógica de la web -->
+  <script src="content/ui.js"></script>
+  <script src="content/site.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

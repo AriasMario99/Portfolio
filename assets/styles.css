@@ -1,0 +1,569 @@
+/* ================================================================
+   Mario Alejandro Arias · estilos
+   1. Tokens (colores, tipografías, ESPACIADO)   ← empieza por aquí
+   2. Base
+   3. Estructura (cabecera, página, pie)
+   4. Bloques de título  (la regla de espaciado vive aquí)
+   5. Componentes
+   6. Páginas
+   7. Móvil y movimiento reducido
+   ================================================================ */
+
+/* ---------- 1. TOKENS -------------------------------------------
+   Concepto: hoja de contactos de película. Fondo negro cálido,
+   texto color papel, un único verde (#A3CC65) para texto secundario,
+   enlaces activos y foco, y etiquetas en monoespaciada como los
+   códigos impresos en el borde del negativo. Guía completa: DESIGN.md */
+:root {
+  color-scheme: dark;
+
+  /* Color */
+  --bg: #0e0d0b;          /* fondo */
+  --surface: #181613;     /* recuadros, placeholders */
+  --line: #2c2924;        /* líneas finas (decorativas) */
+  --line-strong: #6e675c; /* borde de botones: contraste 3:1 sobre el fondo */
+  --text: #ece5d8;        /* texto principal (papel) */
+  --muted: #a3cc65;       /* texto secundario (verde, pedido por Bernardo) */
+  --accent: #a3cc65;      /* mismo verde: enlaces activos, foco, play */
+
+  /* Tipografía */
+  --font-display: "Big Shoulders Display", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* misma letra que las fichas de la web anterior */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* datos de las fichas */
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Escala de tamaños (una sola, no inventes otros) */
+  --text-xs: 0.75rem;     /* etiquetas mono */
+  --text-sm: 0.9375rem;   /* pies de foto, metadatos */
+  --text-md: 1.125rem;    /* texto corrido */
+  --text-lg: 1.375rem;    /* subtítulos, entradilla */
+  --text-xl: clamp(1.75rem, 3.2vw, 2.5rem);   /* títulos de bloque (h2) */
+  --text-2xl: clamp(2rem, 4vw, 3.25rem);      /* título de página (h1) */
+  --text-3xl: clamp(3.5rem, 13vw, 11rem);     /* nombre en la portada */
+
+  /* ESPACIADO: una sola escala para toda la web.
+     Ningún componente usa números sueltos, solo estas variables. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  /* Reglas de espaciado entre título, subtítulo y contenido.
+     Cambiarlas aquí cambia TODA la web de forma coherente. */
+  --gap-eyebrow: var(--space-3);   /* etiqueta → título */
+  --gap-title: var(--space-4);     /* título → subtítulo/entradilla */
+  --gap-content: var(--space-7);   /* bloque de título → contenido */
+  --gap-section: var(--space-9);   /* entre secciones de una página */
+  --gap-items: var(--space-7);     /* entre tarjetas de una lista */
+  --gap-item-text: var(--space-2); /* dentro de una tarjeta: título → datos */
+
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --max: 90rem;
+  --measure: 38rem;                /* ancho máximo de los párrafos */
+  --header-h: 4.25rem;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- 2. BASE ------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + var(--space-5)); }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+img, iframe { display: block; max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--accent); }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+ul, ol { list-style: none; padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--bg); }
+
+h1, h2, h3 { font-weight: inherit; text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Etiqueta mono: años, duraciones, película, contadores */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.skip {
+  position: absolute; left: var(--gutter); top: -10rem; z-index: 50;
+  background: var(--accent); color: var(--bg); padding: var(--space-2) var(--space-4);
+}
+.skip:focus { top: var(--space-2); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- 3. ESTRUCTURA ------------------------------------- */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header__inner {
+  max-width: var(--max); margin-inline: auto;
+  padding-inline: var(--gutter);
+  min-height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-5);
+}
+.brand {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-lg); letter-spacing: 0.04em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap;
+}
+.nav { display: flex; align-items: center; gap: var(--space-6); }
+.nav ul { display: flex; gap: var(--space-5); }
+.nav a {
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+  padding-block: var(--space-2);
+  border-bottom: 1px solid transparent;
+}
+.nav a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
+
+.lang { display: flex; gap: var(--space-1); font-family: var(--font-mono); font-size: var(--text-xs); }
+.lang a {
+  text-decoration: none; padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--line-strong); color: var(--muted);
+  min-height: 2rem; display: inline-flex; align-items: center;
+}
+.lang a[aria-current="true"] { color: var(--bg); background: var(--text); border-color: var(--text); }
+
+.menu-toggle {
+  display: none;
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: var(--space-2) var(--space-3); border: 1px solid var(--line-strong);
+}
+
+main {
+  max-width: var(--max); margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-block: var(--space-8) var(--space-9);
+  display: grid; gap: var(--gap-section);
+}
+main:focus { outline: none; }
+
+.site-footer {
+  border-top: 1px solid var(--line);
+}
+.site-footer__inner {
+  max-width: var(--max); margin-inline: auto;
+  padding-inline: var(--gutter); padding-block: var(--space-6);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4);
+}
+.site-footer ul { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+
+/* ---------- 4. BLOQUES DE TÍTULO -------------------------------
+   Toda página y toda sección usa el mismo patrón:
+     .head            (rejilla con huecos fijos)
+       .label         etiqueta (opcional)        ↕ --gap-eyebrow
+       h1 / h2        título                     ↕ --gap-title
+       .lede          subtítulo o entradilla
+   y entre .head y el contenido hay siempre --gap-content.
+   Nadie pone márgenes a los títulos: los huecos los da el "gap". */
+.section { display: grid; gap: var(--gap-content); min-width: 0; }
+.head { display: grid; gap: var(--gap-title); max-width: 60rem; }
+.head__top { display: grid; gap: var(--gap-eyebrow); }
+.page-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--text-2xl); line-height: 0.9;
+  text-transform: uppercase; letter-spacing: 0.01em;
+}
+.section-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-xl); line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.02em;
+}
+.lede { font-size: var(--text-lg); line-height: 1.45; color: var(--muted); max-width: var(--measure); }
+/* Entradilla en el color del título y en una sola línea en escritorio (Música) */
+.lede--plain { color: var(--text); max-width: none; }
+@media (min-width: 861px) { .lede--plain { white-space: nowrap; } }
+
+/* Texto corrido */
+.meta { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.prose { display: grid; gap: var(--space-4); max-width: var(--measure); }
+
+/* ---------- 5. COMPONENTES ------------------------------------ */
+
+/* Tarjeta: imagen + título + datos */
+.cards {
+  display: grid; gap: var(--gap-items) var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+.cards--small { grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+/* vídeos cuadrados y verticales: en tableta y móvil caben dos por fila */
+.cards--narrow { grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr)); gap: var(--space-6) var(--space-4); }
+/* escritorio: 4 tarjetas por fila en todas las secciones */
+@media (min-width: 1024px) { .cards, .cards--small { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.card { display: grid; gap: var(--space-4); align-content: start; text-decoration: none; min-width: 0; }
+.card__text { display: grid; gap: var(--gap-item-text); }
+.card__title { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); line-height: 1.1; text-transform: uppercase; letter-spacing: 0.02em; }
+/* tarjetas: título en verde; datos y descripción en blanco */
+.card__title { color: var(--accent); }
+.card .meta, .card__body { color: var(--text); }
+.card__body { font-size: var(--text-sm); }
+.card:hover .card__title { color: var(--text); }
+
+.frame { position: relative; overflow: hidden; background: var(--surface); aspect-ratio: 16 / 9; max-width: 100%; }
+.frame--square { aspect-ratio: 1; }
+.frame--poster { aspect-ratio: 2 / 3; }
+.frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease), opacity 300ms; }
+.card:hover .frame img { transform: scale(1.03); }
+
+/* Recuadro "imagen pendiente" (contenido que falta) */
+.pending {
+  display: grid; place-items: center; text-align: center;
+  width: 100%; height: 100%; padding: var(--space-5);
+  border: 1px dashed var(--line);
+  background: repeating-linear-gradient(135deg, var(--surface) 0 12px, var(--bg) 12px 24px);
+}
+.pending span { background: var(--bg); padding: var(--space-1) var(--space-2); }
+
+/* Reproductor con "fachada": el iframe solo se carga al pulsar */
+.player { position: relative; width: 100%; background: var(--surface); aspect-ratio: 16 / 9; max-width: 100%; overflow: hidden; }
+.player iframe, .player video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.player video { object-fit: contain; background: #000; }
+.player__start { position: absolute; inset: 0; width: 100%; display: grid; place-items: center; text-decoration: none; color: inherit; }
+.player__start img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 300ms; }
+.player__start:hover img { opacity: 0.9; }
+/* Botón de play redondo, como en el portfolio anterior: círculo oscuro translúcido con
+   triángulo blanco; al pasar el cursor se llena de verde. Única forma redondeada del sitio. */
+.player__start .play {
+  position: relative; display: grid; place-items: center;
+  width: 4rem; height: 4rem; border-radius: 50%;
+  background: rgb(14 13 11 / 0.55); color: var(--text);
+  transition: background 200ms var(--ease), color 200ms var(--ease), transform 200ms var(--ease);
+}
+.player__start .play::before { content: ""; border-left: 1rem solid currentColor; border-block: 0.6rem solid transparent; transform: translateX(2px); }
+.player__start:hover .play, .player__start:focus-visible .play { background: var(--accent); color: var(--bg); transform: scale(1.06); }
+.player__fallback {
+  position: absolute; inset: 0; display: grid; align-content: end; justify-items: start; gap: var(--space-2);
+  text-align: left; padding: var(--space-4);
+}
+.player__fallback strong { font-family: var(--font-display); font-size: var(--text-xl); text-transform: uppercase; line-height: 1; }
+/* en las tarjetas el título ya va debajo: si no carga el fotograma, solo se ve el botón */
+.card .player__fallback { display: none; }
+
+.ext { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Lista de datos (créditos, ficha) */
+
+
+.back { justify-self: start; text-decoration: none; }
+.back::before { content: "← "; }
+
+/* ---------- 6. PÁGINAS ---------------------------------------- */
+
+/* Inicio: una sola pantalla, sin cabecera ni pie.
+   Nombre arriba a la izquierda · secciones en fila · Contacto abajo a la derecha */
+body.is-home .site-header,
+body.is-home .site-footer { display: none; }
+body.is-home main { max-width: none; padding: 0; }
+
+.home {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr; /* filas exteriores iguales: la fila de secciones queda en el centro de la pantalla */
+  gap: var(--space-7);
+  padding: var(--space-6) var(--gutter);
+}
+.home__intro { display: grid; gap: var(--space-3); align-self: start; justify-self: start; }
+/* escritorio: el rol no aporta ancho propio (width 0 + min-width 100%), así no ensancha el bloque más allá del nombre */
+@media (min-width: 861px) {
+  .home__role { width: 0; min-width: 100%; }
+}
+@media (min-width: 1100px) { .home__role { white-space: nowrap; } }
+.home__headline { display: grid; gap: var(--space-2); }
+.home__role { font-family: var(--font-sans); font-size: 1rem; line-height: 1.4; color: var(--accent); }
+.home__tagline { font-family: var(--font-sans); font-size: var(--text-sm); line-height: 1.6; color: var(--text); max-width: 34rem; }
+.home__top { display: flex; justify-content: space-between; align-items: start; gap: var(--space-4); }
+.home__name {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--text-xl); line-height: 1; letter-spacing: 0.02em; text-transform: uppercase;
+}
+.home__name a { text-decoration: none; }
+
+.home > nav { align-self: center; }
+/* compensa la altura del título para que el centro de las imágenes coincida con el centro de la pantalla */
+@media (min-width: 861px) {
+  .home > nav { margin-bottom: calc(var(--text-lg) + var(--space-4)); }
+  /* altura fija (no min-height) para que las filas 1fr se repartan el espacio libre y no se igualen a la más alta */
+  .home { height: 100vh; height: 100svh; }
+}
+.home__cats {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+.home__cat { display: grid; gap: var(--space-4); text-decoration: none; }
+.home__label {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-lg); line-height: 1; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.home__thumb { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--surface); max-width: 100%; }
+.home__thumb video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.home__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.home__slides { position: relative; display: block; width: 100%; height: 100%; }
+.home__slides img { position: absolute; inset: 0; opacity: 0; transition: opacity 900ms var(--ease); }
+.home__slides img.is-active { opacity: 1; }
+.home__cat:hover .home__label { color: var(--accent); }
+
+/* fuera de la rejilla: así la fila inferior no tiene que medir lo mismo que la superior y la portada cabe sin scroll */
+.home__bottom {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--space-6);
+  display: flex; justify-content: space-between; align-items: center; gap: var(--space-4);
+}
+.home__contact {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--text-lg); line-height: 1; text-transform: uppercase; letter-spacing: 0.03em;
+  text-decoration: none;
+}
+
+/* Ficha de película: tabla etiqueta | dato con líneas finas (estética de la web anterior) */
+.film { display: grid; gap: var(--gap-content); }
+.sheet { max-width: 44rem; border-top: 1px solid var(--line); }
+.sheet__row {
+  display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: var(--space-5);
+  padding-block: var(--space-4); border-bottom: 1px solid var(--line);
+}
+.sheet dt { line-height: 1.8; }
+.sheet dd { margin: 0; font-family: var(--font-sans); font-size: 1rem; line-height: 1.6; color: var(--text); }
+.sheet ul { display: grid; gap: var(--space-1); }
+@media (max-width: 560px) { .sheet__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); } }
+.block { display: grid; gap: var(--space-4); }
+
+/* Proyecto de publicidad: título y créditos a la izquierda, fijos al hacer scroll;
+   los vídeos a la derecha. En tableta y móvil todo va en una columna. */
+.ad { display: grid; gap: var(--gap-content); min-width: 0; }
+.ad__info { display: grid; gap: var(--space-5); align-content: start; min-width: 0; }
+.ad__videos { display: grid; gap: var(--gap-content); min-width: 0; }
+.ad__credits .sheet__row { grid-template-columns: 8.5rem minmax(0, 1fr); }
+@media (min-width: 1024px) {
+  .ad { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); gap: var(--space-7); align-items: start; }
+  .ad__info { position: sticky; top: calc(var(--header-h) + var(--space-6)); max-height: calc(100dvh - var(--header-h) - var(--space-6) * 2); overflow-y: auto; }
+  .ad__videos .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ad__videos .cards--narrow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ad__videos .cards--single { grid-template-columns: minmax(0, 1fr); }
+}
+.posters { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: var(--space-4); }
+.posters button { display: block; width: 100%; }
+.posters img { width: 100%; height: auto; }
+
+/* Fotografía */
+/* Las fotos se reparten en columnas de izquierda a derecha (1, 2, 3 arriba)
+   para respetar el orden de site.js; el número de columnas lo pone app.js. */
+/* Portada de álbum: varias copias apiladas dentro de la tarjeta cuadrada, para que
+   se lea como un conjunto de fotos. Al pasar el cursor se abren un poco en abanico. */
+.frame--stack .stack__print {
+  position: absolute; inset: 15%; overflow: hidden;
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 0.5);
+  transition: transform 500ms var(--ease);
+}
+.frame--stack .stack__print img { width: 100%; height: 100%; object-fit: cover; }
+.card:hover .frame--stack img { transform: none; }
+.frame--stack .stack__print:nth-last-child(3) { transform: translate(-7%, 1%) rotate(-7deg); }
+.frame--stack .stack__print:nth-last-child(2) { transform: translate(6%, -1%) rotate(5deg); }
+.card:hover .frame--stack .stack__print:nth-last-child(3) { transform: translate(-13%, 2%) rotate(-11deg); }
+.card:hover .frame--stack .stack__print:nth-last-child(2) { transform: translate(12%, -2%) rotate(9deg); }
+/* En pantallas táctiles no hay cursor: las copias se abren y cierran solas, despacio. */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .frame--stack .stack__print:nth-last-child(3) { animation: stack-back 2.4s ease-in-out infinite alternate; }
+  .frame--stack .stack__print:nth-last-child(2) { animation: stack-mid 2.4s ease-in-out infinite alternate; }
+}
+@keyframes stack-back { from { transform: translate(-7%, 1%) rotate(-7deg); } to { transform: translate(-13%, 2%) rotate(-11deg); } }
+@keyframes stack-mid { from { transform: translate(6%, -1%) rotate(5deg); } to { transform: translate(12%, -2%) rotate(9deg); } }
+@media (prefers-reduced-motion: reduce) { .frame--stack .stack__print { transition: none; } }
+
+.album-grid { display: flex; gap: var(--space-4); align-items: flex-start; }
+.album-col { flex: 1; min-width: 0; display: grid; gap: var(--space-4); }
+.album-grid button { display: block; width: 100%; background: var(--surface); }
+.album-grid img { width: 100%; height: auto; transition: opacity 300ms; }
+.album-grid button:hover img { opacity: 0.85; }
+
+.album-nav { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+/* álbumes en blanco; solo el álbum en el que estás va en verde (como el menú) */
+.album-nav a { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; color: var(--text); transition: color 200ms var(--ease); }
+.album-nav a:hover, .album-nav a:focus-visible, .album-nav a[aria-current="page"] { color: var(--accent); }
+
+/* Visor de fotos */
+.viewer {
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  padding: 0; border: 0; background: var(--bg); color: var(--text);
+}
+.viewer::backdrop { background: var(--bg); }
+.viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.viewer__bar {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--space-4);
+  padding: var(--space-4) var(--gutter);
+}
+.viewer__stage { position: relative; display: grid; place-items: center; min-height: 0; padding-inline: var(--gutter); }
+.viewer__stage img { position: absolute; inset: 0; margin: auto; max-width: calc(100% - 2 * var(--gutter)); max-height: 100%; object-fit: contain; }
+.viewer__arrow {
+  position: absolute; top: 0; bottom: 0; width: 20%; z-index: 1;
+  display: flex; align-items: center; padding-inline: var(--gutter);
+  font-family: var(--font-mono); font-size: var(--text-lg); color: var(--muted);
+}
+.viewer__arrow:hover { color: var(--accent); }
+.viewer__arrow--prev { left: 0; justify-content: flex-start; }
+.viewer__arrow--next { right: 0; justify-content: flex-end; }
+.viewer__info {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--space-4);
+  padding: var(--space-5) var(--gutter);
+}
+.viewer__title { font-family: var(--font-display); font-weight: 700; font-size: var(--text-xl); text-transform: uppercase; line-height: 1; color: var(--accent); }
+.viewer__facts { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+.viewer__facts .label { color: var(--text); }
+/* Escritorio: como en una galería, la foto a la izquierda y su ficha a la derecha.
+   El escenario se "disuelve" (display: contents) para que foto, flechas y ficha
+   compartan la misma rejilla. */
+@media (min-width: 861px) {
+  .viewer[open] {
+    grid-template-columns: calc(var(--gutter) + 1.5rem) minmax(0, 1fr) minmax(14rem, 20rem) calc(var(--gutter) + 1.5rem);
+    grid-template-rows: auto minmax(0, 1fr) var(--space-7);
+    grid-template-areas: "bar bar bar bar" "prev img info next" ". . . .";
+    column-gap: var(--space-6);
+  }
+  .viewer__bar { grid-area: bar; }
+  .viewer__stage { display: contents; }
+  .viewer__stage img {
+    position: static; grid-area: img; width: 100%; height: 100%; max-width: none; max-height: none;
+    object-fit: contain; object-position: right center;
+  }
+  .viewer__arrow { position: static; width: auto; }
+  .viewer__arrow--prev { grid-area: prev; }
+  .viewer__arrow--next { grid-area: next; }
+  .viewer__info {
+    grid-area: info; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: start;
+    gap: var(--space-5); padding: 0;
+  }
+  .viewer__facts { flex-direction: column; gap: var(--space-2); }
+  /* Fotos verticales: centradas en la pantalla, con la ficha pegada a su derecha.
+     --img-w (ancho real de la foto) lo calcula app.js. */
+  .viewer--portrait[open] {
+    grid-template-columns: calc(var(--gutter) + 1.5rem) minmax(0, 1fr) min(var(--img-w, 40vw), 50vw) minmax(0, 1fr) calc(var(--gutter) + 1.5rem);
+    grid-template-areas: "bar bar bar bar bar" "prev . img info next" ". . . . .";
+  }
+  .viewer--portrait .viewer__stage img { object-position: center; }
+  .viewer--portrait .viewer__info { max-width: 20rem; }
+}
+.viewer__btn { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; padding: var(--space-2) var(--space-3); border: 1px solid var(--line-strong); min-height: 2.75rem; }
+.viewer__btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Música */
+/* Las tarjetas no son enlaces: sin zoom ni cambio de color al pasar el cursor. Solo los iconos se pulsan. */
+.cards--music .card:hover .card__title { color: var(--accent); }
+.cards--music .card:hover .frame img { transform: none; }
+/* Fila de logos de plataformas, como en el portfolio anterior. El área de toque (44 px)
+   es mayor que el icono para pulsarlo bien en móvil. */
+.platforms {
+  display: flex; flex-wrap: wrap; align-items: center;
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--line);
+}
+.platforms__link {
+  display: grid; place-items: center; min-width: 44px; min-height: 44px; padding: var(--space-2);
+  color: var(--accent); transition: color 200ms var(--ease);
+}
+.platforms__link:first-child { margin-left: calc(-1 * var(--space-2)); } /* el icono, no su área de toque, alinea con el texto */
+.platforms__link:hover, .platforms__link:focus-visible { color: var(--text); }
+.platforms__icon { display: block; width: 1.15rem; height: 1.15rem; fill: currentColor; }
+/* Para invitar a pulsar: mientras el cursor está sobre una canción, sus iconos saltan uno tras
+   otro de izquierda a derecha, como una ola. Pasar por encima de un icono no la interrumpe. */
+@media (hover: hover) {
+  .cards--music .card:hover .platforms__icon { animation: platforms-wave 1.8s var(--ease) infinite; animation-delay: calc(var(--i) * 120ms); }
+}
+/* En móvil los logos son más grandes y con más área de toque (48 px) para pulsarlos con el dedo */
+@media (max-width: 860px) {
+  .platforms__link { min-width: 48px; min-height: 48px; padding: var(--space-3); }
+  .platforms__link:first-child { margin-left: calc(-1 * var(--space-3)); }
+  .platforms__icon { width: 1.5rem; height: 1.5rem; }
+}
+@keyframes platforms-wave {
+  0%, 30%, 100% { transform: translateY(0); }
+  12% { transform: translateY(-5px); }
+}
+
+/* Bio */
+.bio { display: grid; gap: var(--space-8); grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: start; }
+/* el texto ocupa todo el ancho que deja la foto */
+.bio .prose { max-width: none; }
+/* enlaces dentro del texto: en el verde de acento para que se vean como enlace */
+.prose a { color: var(--accent); }
+.prose a:hover { color: var(--text); }
+.bio__photo img { width: 100%; height: auto; }
+.bio__text { display: grid; gap: var(--space-7); min-width: 0; }
+.contact { display: grid; gap: var(--space-4); }
+.contact__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); }
+.contact__value { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); text-transform: none; line-height: 1.1; overflow-wrap: anywhere; }
+.copy-btn { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; padding: var(--space-2) var(--space-3); border: 1px solid var(--line-strong); color: var(--muted); }
+.copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Transición suave al cambiar de página */
+.page-enter { animation: enter 380ms var(--ease) both; }
+@keyframes enter { from { opacity: 0.001; transform: translateY(6px); } }
+
+/* ---------- 7. MÓVIL Y MOVIMIENTO REDUCIDO -------------------- */
+@media (max-width: 960px) {
+  .bio { grid-template-columns: minmax(0, 1fr); }
+  .bio { gap: var(--space-6); }
+  .bio__photo { max-width: 26rem; }
+}
+
+@media (max-width: 860px) {
+  .menu-toggle { display: inline-block; }
+  .nav {
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: var(--space-5);
+    padding: var(--space-5) var(--gutter) var(--space-6);
+    background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  .nav.is-open { display: flex; }
+  .nav ul { flex-direction: column; gap: var(--space-1); }
+  .nav a { font-size: var(--text-sm); display: block; }
+  :root { --gap-section: var(--space-8); --gap-content: var(--space-6); }
+  .lede { font-size: var(--text-md); }
+  main { padding-block: var(--space-7) var(--space-8); }
+  .viewer__arrow { width: 25%; }
+  .home__cats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-4); }
+  /* portada en móvil: sin filas elásticas (el contenido manda), más aire entre textos y antes de las secciones */
+  .home { grid-template-rows: auto; min-height: 0; gap: var(--space-8); }
+  .home__intro { gap: var(--space-5); }
+  .home__headline { gap: var(--space-3); }
+  /* la frase toma el ancho del rol (texto verde), alineada a la izquierda; a 16 px como el rol y con letter-spacing 0.04em su primera línea llega hasta el borde del rol */
+  .home__tagline { width: 0; min-width: 100%; font-size: 1rem; letter-spacing: 0.04em; }
+  /* Bio y Contacto justo debajo de las secciones, sin hueco hasta el final de la pantalla */
+  /* Bio y Contacto y, debajo, ES · EN, alineados a la derecha */
+  .home__bottom { position: static; margin-top: calc(var(--space-6) - var(--space-8)); flex-direction: column-reverse; align-items: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+.nowrap { white-space: nowrap; }
+
