@@ -502,7 +502,7 @@
     if (kind === 'album') {
       var album = SITE.albums.filter(function (a) { return a.slug === r.rest })[0]
       return album ? album.photos.map(function (p) {
-        return { src: p.src, title: t(p.title), facts: [p.year, t(p.film), t(UI.printSize) + ': ' + t(p.size)], print: true }
+        return { src: p.src, title: t(p.title), facts: [p.year, t(p.film), t(UI.printSize) + ': ' + t(p.size)], album: t(album.name) }
       }) : []
     }
     var film = SITE.films.filter(function (f) { return f.slug === r.rest })[0]
@@ -517,6 +517,12 @@
     paintViewer()
     if (d.showModal) d.showModal(); else d.setAttribute('open', '')
   }
+  // "Comprar": abre el correo del dispositivo con el mensaje ya redactado
+  function buyMail(item) {
+    function fill(x) { return t(x).replace(/\{title\}/g, item.title).replace(/\{album\}/g, item.album) }
+    return 'mailto:' + SITE.profile.email + '?subject=' + encodeURIComponent(fill(UI.buySubject)) +
+      '&body=' + encodeURIComponent(fill(UI.buyBody))
+  }
   function paintViewer() {
     var item = viewer.list[viewer.index]
     var n = viewer.list.length
@@ -527,7 +533,7 @@
     $('#viewer-count').textContent = pad(viewer.index + 1) + ' / ' + pad(n)
     $('#viewer-title').textContent = item.title
     $('#viewer-facts').innerHTML = item.facts.filter(Boolean).map(function (f) { return '<span class="label">' + esc(f) + '</span>' }).join('') +
-      (item.print ? '<span class="label">' + esc(t(UI.buyPrint)) + ' ' + esc(SITE.profile.email) + '</span>' : '')
+      (item.album ? '<a class="viewer__btn viewer__buy" href="' + esc(buyMail(item)) + '">' + esc(t(UI.buy)) + '</a>' : '')
     $('#viewer-close').textContent = t(UI.close)
     $('#viewer-prev').setAttribute('aria-label', t(UI.prev))
     $('#viewer-next').setAttribute('aria-label', t(UI.next))
@@ -606,6 +612,10 @@
       $('#menu-toggle').setAttribute('aria-expanded', String(open))
     }
   })
+  // Fotos: sin menú de clic derecho ("Guardar imagen como…") ni arrastrar para descargarlas.
+  // Es una barrera, no una protección total: nadie puede impedir una captura de pantalla.
+  document.addEventListener('contextmenu', function (e) { if (e.target.closest('img, .frame, .player')) e.preventDefault() })
+  document.addEventListener('dragstart', function (e) { if (e.target.closest('img')) e.preventDefault() })
   document.addEventListener('securitypolicyviolation', function (e) {
     document.querySelectorAll('.player iframe').forEach(function (frame) {
       if (!frame._start || !e.blockedURI || frame.src.indexOf(e.blockedURI) !== 0) return

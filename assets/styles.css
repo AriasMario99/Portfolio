@@ -84,6 +84,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 img, iframe { display: block; max-width: 100%; }
+/* sin menú de "guardar imagen" al mantener pulsada una foto en el móvil, ni arrastrarla */
+img { -webkit-touch-callout: none; -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { color: var(--accent); }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
@@ -472,6 +474,8 @@ body.is-home main { max-width: none; padding: 0; }
 }
 .viewer__btn { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; padding: var(--space-2) var(--space-3); border: 1px solid var(--line-strong); min-height: 2.75rem; }
 .viewer__btn:hover { border-color: var(--accent); color: var(--accent); }
+.viewer__buy { display: inline-flex; align-items: center; justify-content: center; align-self: start; min-width: 8rem; margin-top: var(--space-2); text-decoration: none; color: var(--accent); border-color: var(--accent); }
+.viewer__buy:hover, .viewer__buy:focus-visible { background: var(--accent); color: var(--bg); }
 
 /* Música */
 /* Las tarjetas no son enlaces: sin zoom ni cambio de color al pasar el cursor. Solo los iconos se pulsan. */

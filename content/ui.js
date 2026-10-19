@@ -79,7 +79,13 @@ window.UI = {
   video: { es: 'vídeo', en: 'video' },
   printSize: { es: 'Tamaño de copia', en: 'Print size' },
   filmStock: { es: 'Película', en: 'Film' },
-  buyPrint: { es: 'Para comprar una copia, escribe a', en: 'To buy a print, write to' },
+  buy: { es: 'Comprar', en: 'Buy' },
+  // Correo que se abre al pulsar "Comprar" en el visor ({title} y {album} se rellenan solos)
+  buySubject: { es: 'Compra de fotografía — "{title}"', en: 'Print purchase — "{title}"' },
+  buyBody: {
+    es: 'Hola Mario,\n\nMe interesa comprar la fotografía "{title}" ({album}).\n\nGracias.',
+    en: 'Hi Mario,\n\nI would like to buy the photograph "{title}" ({album}).\n\nThank you.',
+  },
   prev: { es: 'Anterior', en: 'Previous' },
   next: { es: 'Siguiente', en: 'Next' },
 
