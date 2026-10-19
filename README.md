@@ -128,8 +128,14 @@ claves ni base de datos.**
 - **Vercel o Netlify (recomendado):** importa el repositorio de GitHub. Framework: "Other",
   sin comando de build, carpeta de salida: la raíz (`.`). Cada push a `main` publica solo.
   También puedes arrastrar la carpeta a https://app.netlify.com/drop para una prueba rápida.
-- **GitHub Pages:** Settings › Pages › Deploy from a branch › `main` / root.
-- **Dominio propio:** se añade en el panel del hosting (Vercel: Settings › Domains).
+- **GitHub Pages (el que se usa):** repositorio `AriasMario99/Portfolio`, Settings › Pages ›
+  Deploy from a branch › `main` / root. El archivo `CNAME` le dice a GitHub que el dominio es
+  **marioalejandroarias.com**.
+- **Dominio propio:** en el DNS del dominio, 4 registros A para `@` (185.199.108.153,
+  185.199.109.153, 185.199.110.153, 185.199.111.153) y un CNAME `www` → `ariasmario99.github.io`.
+  Cuando GitHub lo verifique, marca "Enforce HTTPS".
+- **Vista previa al compartir:** `images/compartir.jpg` (1200×630) y las etiquetas `og:` de
+  `index.html`, con la dirección completa del dominio. Si cambia el dominio, cámbialas también.
 
 Antes de publicar, abre la web en el navegador y revisa a ancho de escritorio y de móvil
 (en las herramientas de desarrollo, 390 px) que no aparezca scroll horizontal.
